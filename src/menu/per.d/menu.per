@@ -1,0 +1,36 @@
+database formonly
+
+screen
+{
+
+	M E N U   P R I N C I P A L
+	---------------------------
+
+============================================
+	
+  [f][f001]-[f002                        ]
+  [f][f001]-[f002                        ]
+  [f][f001]-[f002                        ]
+  [f][f001]-[f002                        ]
+  [f][f001]-[f002                        ]
+  [f][f001]-[f002                        ]
+  [f][f001]-[f002                        ]
+  [f][f001]-[f002                        ]
+  [f][f001]-[f002                        ]
+  [f][f001]-[f002                        ]
+
+============================================
+
+}
+end
+
+attributes
+	f    = formonly.control type char, invisible;
+	f001 = formonly.nro_programa type char, noentry;
+	f002 = formonly.des_programa type char, noentry;
+end
+
+instructions
+	delimiters " "
+	screen record programas[10] (control thru des_programa)
+end

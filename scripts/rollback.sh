@@ -9,6 +9,10 @@ drop table claves_usuarios
 ;
 drop table sesiones
 ;
+drop table programas_erp
+;
+drop table programas_usuarios
+;
 !
 
 dbaccess <<!
