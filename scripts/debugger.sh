@@ -2,7 +2,12 @@
 
 PROGRAMA=$1
 
-DBSRC=${PWD}/src/app:${PWD}/src/login/4gl.d:${PWD}/src/biblioteca/4gl.d:${PWD}/src/tablas:${DBSRC}
+for directorio in $(find . -type f -name "*.4gl" | cut -c 3- | \
+		awk -F "/" '{for(i=1; i<NF; i++){printf "%s/", $i}; print ""}' | uniq); do
+
+	DBSRC=${PWD}/${directorio}:${DBSRC}
+done
+
 export DBSCR
 
 fgldb ${PROGRAMA}
