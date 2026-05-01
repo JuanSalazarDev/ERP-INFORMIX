@@ -35,7 +35,7 @@ define
 
 initialize clave_anterior, nueva_clave, conf_nueva_clave to null
 
-open window w_cambiar_clave at 2, 4 with form "./bin/biblioteca/frm.d/cambiar_clave" 
+open window w_cambiar_clave at 3, 10 with form "./bin/biblioteca/frm.d/cambiar_clave" 
 	attribute(border, form line 1)
 
 if solicitar_clave_anterior = true

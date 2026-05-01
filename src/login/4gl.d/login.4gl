@@ -5,7 +5,7 @@
 # DESCRIPCION: Funciones de acceso a aplicacion
 # AUTOR: Juan Salazar
 # FECHA CREACION: 27/Mar/2026
-# FECHA ULTIMA MODIFICACION: 25/Abr/2026
+# FECHA ULTIMA MODIFICACION: 01/May/2026
 # ============================================================================================================
 #
 database control_erp
@@ -24,12 +24,14 @@ define
 # DESCRIPCION: Inicio ejecucion programa
 # AUTOR: Juan Salazar
 # FECHA CREACION: 21/Abr/2026
-# FECHA ULTIMA MODIFICACION: 21/Abr/2026
+# FECHA ULTIMA MODIFICACION: 01/May/2026
 # ============================================================================================================
 #
 main
 
 defer interrupt
+
+call desplegar_cabecera_programa("", "     L O G I N      ")
 
 if solicitar_acceso() = false
         then
@@ -45,7 +47,7 @@ end main
 # OBJETIVO: Solicitar acceso a la aplicacion
 # AUTOR: Juan Salazar
 # FECHA CREACION: 27/Mar/2026
-# FECHA ULTIMA MODIFICACION: 25/Abr/2026
+# FECHA ULTIMA MODIFICACION: 01/May/2026
 # ============================================================================================================
 #
 function solicitar_acceso()
@@ -57,7 +59,7 @@ define
 
 initialize usuario, clave to null
 
-open window w_solicitar_acceso at 2, 4 with form "./bin/login/frm.d/login" attribute(border, form line 1)
+open window w_solicitar_acceso at 3, 11 with form "./bin/login/frm.d/login" attribute(border, form line 1)
 
 display "     I N G R E S O" to field_1 attribute(reverse)
 display "     =============" to field_2 attribute(yellow)

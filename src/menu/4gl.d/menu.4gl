@@ -47,9 +47,17 @@ define
 #
 main
 
+define
+	usuario like usuarios.usuario, # Usuario
+	ok           smallint          # Indicador estado transaccion
+
 defer interrupt
 
 let id_usuario = arg_val(1)
+
+call obtener_usuario_t_usuarios(id_usuario) returning usuario, ok
+
+call desplegar_cabecera_programa(usuario, "       M E N U      ")
 
 error "Cargando programas . . ."
 
@@ -84,7 +92,7 @@ define
 let idx_arr = 1
 let reg_actual_cursor = 0
 
-open window w_desplegar_menu at 2, 4 with form "./bin/menu/frm.d/menu" attribute(border, form line 1)
+open window w_desplegar_menu at 3, 9 with form "./bin/menu/frm.d/menu" attribute(border, form line 1)
 
 input anterior, control, siguiente without defaults from anterior, control, siguiente
 
