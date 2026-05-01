@@ -4,12 +4,22 @@ id_usuario=""
 
 #
 # ============================================================================================================
+# Desplegar menu principal
+# ============================================================================================================
+#
+desplegar_menu(){
+
+fglgo ./bin/menu/menu.4gi ${id_usuario}
+
+}
+#
+# ============================================================================================================
 # Eliminar sesion del usuario
 # ============================================================================================================
 #
 eliminar_sesion(){
 
-dbaccess control_erp <<!
+dbaccess control_erp > /dev/null 2>&1 <<!
 delete from sesiones
 where id_usuario = "${id_usuario}"
 !
@@ -48,7 +58,7 @@ gestionar_sesion(){
 
 local archivo_sesiones=/tmp/sesiones_${$}_$(date '+%Y%m%d')
 
-dbaccess control_erp <<!
+dbaccess control_erp > /dev/null 2>&1 <<!
 unload to "${archivo_sesiones}" delimiter ";"
 select count(*) from sesiones
 where id_usuario = "${id_usuario}"
@@ -63,7 +73,7 @@ if [[ ${numero_sesiones} -ne 0 ]]; then
 	fi
 fi
 
-dbaccess control_erp <<!
+dbaccess control_erp > /dev/null 2>&1 <<!
 insert into sesiones values ("${id_usuario}", ${$}, current)
 ;
 !
@@ -108,5 +118,7 @@ fi
 if ! gestionar_sesion; then
 	exit 1
 fi
+
+desplegar_menu
 
 eliminar_sesion
