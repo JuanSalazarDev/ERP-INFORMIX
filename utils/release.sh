@@ -59,4 +59,5 @@ insert into programas_usuarios values (1, 1, today)
 ;
 insert into programas_usuarios values (1, 2, today)
 ;
+
 !

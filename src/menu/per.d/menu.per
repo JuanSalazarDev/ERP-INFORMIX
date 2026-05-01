@@ -8,29 +8,32 @@ screen
 
 ============================================
 	
-  [f][f001]-[f002                        ]
-  [f][f001]-[f002                        ]
-  [f][f001]-[f002                        ]
-  [f][f001]-[f002                        ]
-  [f][f001]-[f002                        ]
-  [f][f001]-[f002                        ]
-  [f][f001]-[f002                        ]
-  [f][f001]-[f002                        ]
-  [f][f001]-[f002                        ]
-  [f][f001]-[f002                        ]
-
+  [i|f001]-[f002                         ]
+  [i|f001]-[f002                         ]
+  [i|f001]-[f002                         ]
+  [i|f001]-[f002                         ]
+  [i|f001]-[f002                         ]
+  [i|f001]-[f002                         ]
+  [i|f001]-[f002                         ]
+  [i|f001]-[f002                         ]
+  [i|f001]-[f002                         ]
+  [i|f001]-[f002                         ]
+  [b]              [c]                 [d]
 ============================================
 
 }
 end
 
 attributes
-	f    = formonly.control type char, invisible;
-	f001 = formonly.nro_programa type char, noentry;
-	f002 = formonly.des_programa type char, noentry;
+	b    = formonly.anterior type char, invisible;
+	c    = formonly.control type char, invisible;
+	d    = formonly.siguiente type char, invisible;
+	i    = formonly.indicador type char, noentry;
+	f001 = formonly.id type char, noentry;
+	f002 = formonly.descripcion type char, noentry;
 end
 
 instructions
 	delimiters " "
-	screen record programas[10] (control thru des_programa)
+	screen record programas_usuario[10] (indicador thru descripcion)
 end

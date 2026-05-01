@@ -5,20 +5,25 @@
 # DESCRIPCION: Servicios relacionados al procesamiento de programas de usuario
 # AUTOR: Juan Salazar
 # FECHA CREACION: 25/04/2026
-# FECHA ULTIMA MODIFICACION: 27/04/2026
+# FECHA ULTIMA MODIFICACION: 01/05/2026
 # ============================================================================================================
 #
 database control_erp
 
+globals
+
 define
-	cursor_programas_usuario_creado smallint # Indicador de que el cursor 1 ya fue creado
+	mensaje_error char(2000),   # Mensaje de error generado
+	nro_registros decimal(14,0) # Numero de registros totales consulta
+
+end globals
 #
 # ============================================================================================================
 # FUNCION: crear_cursor_programas_usuario()
 # OBJETIVO: Crear cursor de programas asociados a usuario
 # AUTOR: Juan Salazar
 # FECHA CREACION: 25/04/2026
-# FECHA ULTIMA MODIFICACION: 27/04/2026
+# FECHA ULTIMA MODIFICACION: 29/04/2026
 # ============================================================================================================
 #
 function crear_cursor_programas_usuario()
@@ -29,12 +34,65 @@ define
 let sentencia_sql =
 	"select p.id, p.descripcion from programas_erp p, programas_usuarios pu ",
 	"where p.id = pu.id_programa ",
-	"and pu.id_usuario = ? "
+	"and pu.id_usuario = ? ",
+	"order by p.id "
 prepare p_programas_usuario from sentencia_sql
-declare c_programas_usuario cursor with hold for p_programas_usuario
+declare c_programas_usuario scroll cursor with hold for p_programas_usuario
 free p_programas_usuario
 
-let cursor_programas_usuario_creado = true
+end function
+#
+# ============================================================================================================
+# FUNCION: cargar_menu()
+# DESCRIPCION: Cargar listado de programas del usuario
+# AUTOR: Juan Salazar
+# FECHA CREACION: 29/Abr/2026
+# FECHA ULTIMA MODIFICACION: 29/Abr/2026
+# ============================================================================================================
+#
+function cargar_menu(id_usuario)
+
+define
+	id_usuario like usuarios.id # ID usuario
+
+if existen_programas_para_usuario(id_usuario) = false
+	then
+	return false
+end if
+
+call crear_cursor_programas_usuario()
+
+open c_programas_usuario using id_usuario
+
+return true
+
+end function
+#
+# ============================================================================================================
+# FUNCION: existen_programas_para_usuario()
+# DESCRIPCION: Verificar si el usuario tiene programas asociados
+# AUTOR: Juan Salazar
+# FECHA CREACION: 29/Abr/2026
+# FECHA ULTIMA MODIFICACION: 01/May/2026
+# ============================================================================================================
+#
+function existen_programas_para_usuario(id_usuario)
+
+define
+	id_usuario like usuarios.id # ID usuario
+
+initialize nro_registros to null
+
+select count(*) into nro_registros from programas_usuarios
+where id_usuario = id_usuario
+
+if nro_registros is null or nro_registros = 0
+	then
+	let mensaje_error = "No existen programas asociados al usuario, contacte al administrador"
+	return false
+end if
+
+return true
 
 end function
 #
@@ -43,29 +101,27 @@ end function
 # OBJETIVO: Obtener programas asociados a usuario
 # AUTOR: Juan Salazar
 # FECHA CREACION: 25/04/2026
-# FECHA ULTIMA MODIFICACION: 27/04/2026
+# FECHA ULTIMA MODIFICACION: 29/04/2026
 # ============================================================================================================
 #
-function obtener_programa(id_usuario)
+function obtener_programa(nro_registro_mov)
 
 define
-	id_usuario      like usuarios.id,               # ID usuario
-	id_programa     like programas_erp.id,          # ID programa
-	descripcion_prg like programas_erp.descripcion, # Descripcion programa
-	ok              smallint                        # Indicador estado transaccion
+	nro_registro_mov integer,                         # Numero de registro reposicionar cursor
+	id_programa       like programas_erp.id,          # ID programa
+	descripcion_prg   like programas_erp.descripcion, # Descripcion programa
+	ok                smallint                        # Indicador estado transaccion
 
 initialize id_programa, descripcion_prg, ok to null
 
 let ok = true
 
-if cursor_programas_usuario_creado = false
+if nro_registro_mov != 0
 	then
-	call crear_cursor_programas_usuario()
-
-	open c_programas_usuario using id_usuario
+	fetch absolute nro_registro_mov c_programas_usuario into id_programa, descripcion_prg
+else
+	fetch next c_programas_usuario into id_programa, descripcion_prg
 end if
-
-fetch c_programas_usuario into id_programa, descripcion_prg
 
 if sqlca.sqlcode != 0
 	then
