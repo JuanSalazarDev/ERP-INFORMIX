@@ -24,6 +24,8 @@ done
 
 # Programa login
 cat bin/login/4go.d/login.4go bin/biblioteca/4go.d/servicios_de_claves.4go \
-	bin/tablas/4go.d/claves_usuarios.4go bin/tablas/4go.d/usuarios.4go > bin/login/login.4gi
+	bin/tablas/4go.d/claves_usuarios.4go bin/tablas/4go.d/usuarios.4go \
+	bin/biblioteca/4go.d/servicios_de_programas.4go> bin/login/login.4gi
 
-cat bin/menu/4go.d/menu.4go bin/tablas/4go.d/servicios/programas_usuario.4go > bin/menu/menu.4gi
+cat bin/menu/4go.d/menu.4go bin/tablas/4go.d/servicios/programas_usuario.4go \
+	bin/biblioteca/4go.d/servicios_de_programas.4go bin/tablas/4go.d/usuarios.4go > bin/menu/menu.4gi
