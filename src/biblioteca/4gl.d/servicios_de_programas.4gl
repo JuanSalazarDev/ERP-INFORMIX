@@ -5,60 +5,40 @@
 # DESCRIPCION: Funciones para ejecutar en cada programa
 # AUTOR: Juan Salazar
 # FECHA CREACION: 19/Abr/2026
-# FECHA ULTIMA MODIFICACION: 19/Abr/2026
+# FECHA ULTIMA MODIFICACION: 01/May/2026
 # ============================================================================================================
 #
 database control_erp
 #
 # ============================================================================================================
-# FUNCION: gestionar_datos_sesion()
-# OBJETIVO: Gestionar inicios de sesion en sistema
-# AUTOR: Juan Salazar
-# FECHA CREACION: 19/Abr/1016
-# FECHA ULTIMA MODIFICACION: 19/Abr/2026
-# ============================================================================================================
-#
-function gestionar_datos_sesion(usuario)
-
-define
-	usuario    like usuarios.usuario,   # Usuario
-	id_sesion  like sesiones.id_sesion, # Sesion actual
-	id_usuario like usuarios.id,        # ID usuario
-	cmd        char(4800)               # Comando
-
-initialize id_sesion, id_usuario, cmd to null
-
-let id_sesion = fgl_getenv("RANDOM")
-let id_usuario = obtener_id_usuario_t_usuarios(usuario)
-
--- PENDIENTE: Crear tabla sesiones, archivo de la tabla sesiones para lecturas e inserciones,
--- funcion para obtener informacion de sesion y auditorias de tablas
-
-return true
-
-end function
-#
-# ============================================================================================================
-# FUNCION: desplegar_datos_referenciales_programa()
-# OBJETIVO: Desplegar en pantalla los datos referenciales de programa
+# FUNCION: desplegar_cabecera_programa()
+# OBJETIVO: Desplegar en pantalla informacion de programa
 # AUTOR: Juan Salazar
 # FECHA CREACION: 19/Abr/2026
-# FECHA ULTIMA MODIFICACION: 19/Abr/2026
+# FECHA ULTIMA MODIFICACION: 01/May/2026
 # ============================================================================================================
 #
-function desplegar_datos_referenciales_programa(programa, descripcion_programa)
+function desplegar_cabecera_programa(usuario, descripcion_programa)
 
 define
-	programa             char(40), # Programa
-	descripcion_programa char(40), # Descripcion programa
+	usuario              char(8),  # Programa
+	complemento          char(8),  # Complemento nombre usuario
+	diferencia           smallint, # Diferencia entre longitud cadena usuario y longitud maxima
+	descripcion_programa char(20), # Descripcion programa
 	fecha                date      # Fecha actual
 
-let descripcion_programa = centrar_texto(descripcion_programa, 40)
 let fecha = today using "dd/mm/yyyy"
+let complemento = "________"
+let diferencia = 8 - length(usuario)
 
-display descripcion_programa at 1, 20 attribute(reverse)
-display "Fecha: ", fecha at 1, 63
-display "Programa: ", programa at 2, 1
+if diferencia > 0
+	then
+	let usuario = usuario clipped, complemento[1, diferencia]
+end if
+
+display " USUARIO: ", usuario clipped, " " at 1, 1 attribute(reverse)
+display descripcion_programa at 1, 21 attribute(reverse)
+display " FECHA: ", fecha, " " at 1, 42 attribute(reverse)
 
 end function
 #
