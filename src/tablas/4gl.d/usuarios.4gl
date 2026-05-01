@@ -5,7 +5,7 @@
 # DESCRIPCION: Rutinas de acceso, insercion, actualizacion, eliminacion en tabla "usuarios"
 # AUTOR: Juan Salazar
 # FECHA CREACION: 31/03/2026
-# FECHA ULTIMA MODIFICACION: 19/04/2026
+# FECHA ULTIMA MODIFICACION: 01/May/2026
 # ============================================================================================================
 #
 database control_erp
@@ -57,7 +57,7 @@ end function
 # OBJETIVO: Obtener usuario de la tabla "usuarios"
 # AUTOR: Juan Salazar
 # FECHA CREACION: 31/03/2026
-# FECHA ULTIMA MODIFICACION: 19/04/2026
+# FECHA ULTIMA MODIFICACION: 01/May/2026
 # ============================================================================================================
 #
 function obtener_usuario_t_usuarios(id_usuario)
@@ -74,7 +74,7 @@ let ok = true
 
 let sentencia_sql =
 	"select usuario from usuarios ",
-	"where id_usuario = ? "
+	"where id = ? "
 prepare p_obtener_usuario_t_usuarios from sentencia_sql
 declare d_obtener_usuario_t_usuarios cursor with hold for p_obtener_usuario_t_usuarios
 free p_obtener_usuario_t_usuarios
@@ -99,7 +99,7 @@ end function
 # OBJETIVO: Obtener fecha de alta de usuario de la tabla "usuarios"
 # AUTOR: Juan Salazar
 # FECHA CREACION: 31/03/2026
-# FECHA ULTIMA MODIFICACION: 19/04/2026
+# FECHA ULTIMA MODIFICACION: 01/May/2026
 # ============================================================================================================
 #
 function obtener_fecha_de_alta_t_usuarios(id_usuario)
@@ -116,7 +116,7 @@ let ok = true
 
 let sentencia_sql =
 	"select fecha_alta from usuarios ",
-	"where id_usuario = ? "
+	"where id = ? "
 prepare p_obtener_fecha_alta_t_usuarios from sentencia_sql
 declare c_obtener_fecha_alta_t_usuarios cursor with hold for p_obtener_fecha_alta_t_usuarios
 free p_obtener_fecha_alta_t_usuarios
