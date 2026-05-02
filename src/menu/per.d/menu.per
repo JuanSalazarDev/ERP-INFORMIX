@@ -20,13 +20,12 @@ screen
   [i|f001]-[f002                         ]
   [b]              [c]                 [d]
 ============================================
-
 }
 end
 
 attributes
 	b    = formonly.anterior type char, invisible;
-	c    = formonly.control type char, invisible;
+	c    = formonly.control type char, invisible, comments = "F7 = Seleccionar - CTRL C = SALIR";
 	d    = formonly.siguiente type char, invisible;
 	i    = formonly.indicador type char, noentry;
 	f001 = formonly.id type char, noentry;
