@@ -28,6 +28,7 @@ end globals
 #
 define
 	id_usuario             like usuarios.id, # Usuario
+	archivo_programa       char(100),        # Archivo donde se almacenara nombre programa a ejecutar
 	reg_actual_cursor      decimal(14,0),    # Registro actual del cursor
 	max_registros_pantalla integer,          # Maximo de registros que se renderizaran en pantalla
 
@@ -54,6 +55,7 @@ define
 defer interrupt
 
 let id_usuario = arg_val(1)
+let archivo_programa = arg_val(2)
 
 call obtener_usuario_t_usuarios(id_usuario) returning usuario, ok
 
@@ -67,9 +69,12 @@ if cargar_menu(id_usuario) = false
 	exit program 1
 end if
 
-call desplegar_menu()
+if desplegar_menu() = false
+	then
+	exit program 1
+end if
 
-call cerrar_cursor_programas_usuario()
+exit program 0
 
 end main
 #
@@ -121,13 +126,29 @@ input anterior, control, siguiente without defaults from anterior, control, sigu
 
 		next field control
 
+	on key (F7)
+		if ejecutar_programa(programas_usuario[idx_arr].id) = false
+			then
+			error mensaje_error clipped
+		end if
+		exit input
+
 	on key (interrupt)
-		let int_flag = false
 		exit input
 
 end input
 
 close window w_desplegar_menu
+
+call cerrar_cursor_programas_usuario()
+
+if int_flag = true
+	then
+	let int_flag = false
+	return false
+end if
+
+return true
 
 end function
 #
@@ -211,5 +232,47 @@ for idx = 1 to max_registros_pantalla
 	initialize programas_usuario[idx].indicador to null
 	display programas_usuario[idx].* to programas_usuario[idx].*
 end for
+
+end function
+#
+# ============================================================================================================
+# FUNCION: renderizar_menu()
+# DESCRIPCION: Renderizar en pantalla menu
+# AUTOR: Juan Salazar
+# FECHA CREACION: 29/Abr/2026
+# FECHA ULTIMA MODIFICACION: 01/May/2026
+# ============================================================================================================
+#
+function ejecutar_programa(id_programa)
+
+define
+	id_programa like programas_erp.id,       # ID programa
+	programa    like programas_erp.programa, # Programa a ejecutar
+	ok          smallint,                    # Indicador estado transaccion
+	cmd         char(4800)                   # Comando
+
+initialize programa, ok, cmd to null
+
+call obtener_programa_t_programas_erp(id_programa) returning programa, ok
+
+if ok = false
+	then
+	let mensaje_error = 
+		"Sin informacion de programa con ID ", id_programa using "<<<<<<<<", ". ",
+		"Contacte al administrador"
+	return false
+end if
+
+let cmd = "echo '", programa clipped, "' > ", archivo_programa clipped
+run cmd returning ok
+
+if ok != 0
+	then
+	let mensaje_error = 
+		"No es posible ejecutar el programa ", programa clipped, ". Contacte al administrador"
+	return false
+end if
+
+return true
 
 end function

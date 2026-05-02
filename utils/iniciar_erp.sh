@@ -4,12 +4,46 @@ id_usuario=""
 
 #
 # ============================================================================================================
+# Buscar y ejecutar programa dado
+# ============================================================================================================
+#
+ejecutar_programa(){
+
+archivo_programa=$1
+
+local programa=$(cat ${archivo_programa})
+
+rm -rf ${archivo_programa}
+
+local programa_completo=$(find . -type f -name "${programa}*" 2>/dev/null)
+
+if [[ -z "${programa_completo}" ]]; then
+	echo "No se encuentra el programa ${programa}. Contacte al administrador"
+	sleep 3
+	return
+fi
+
+fglgo ${programa_completo}
+
+}
+#
+# ============================================================================================================
 # Desplegar menu principal
 # ============================================================================================================
 #
 desplegar_menu(){
 
-fglgo ./bin/menu/menu.4gi ${id_usuario}
+local archivo_programa=/tmp/prg_${$}_$(date '+%Y%m%d')
+
+while true; do
+	fglgo ./bin/menu/menu.4gi ${id_usuario} ${archivo_programa}
+
+	if [[ $? -ne 0 ]]; then
+		break
+	fi
+
+	ejecutar_programa ${archivo_programa}
+done
 
 }
 #

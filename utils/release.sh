@@ -30,6 +30,7 @@ create table sesiones(
 create table programas_erp(
 	id          decimal(8,0) not null primary key,
 	descripcion char(40) not null,
+	programa    char(40) not null,
 	tipo        char(30) not null,
 	fecha_alta  date not null
 )
@@ -51,9 +52,9 @@ insert into usuarios values (1, "admin", "", "", today)
 ;
 insert into claves_usuarios values (1, "", "")
 ;
-insert into programas_erp values (1, "Gestion usuarios", "4GI", today)
+insert into programas_erp values (1, "Gestion usuarios", "gestion_usuarios", "4GI", today)
 ;
-insert into programas_erp values (2, "Asociacion programas usuarios", "4GI", today)
+insert into programas_erp values (2, "Asociacion programas usuarios", "asociacion_prg_usuario", "4GI", today)
 ;
 insert into programas_usuarios values (1, 1, today)
 ;
