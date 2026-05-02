@@ -10,6 +10,10 @@ find . -type f -name "*.per" | xargs -I {} form4gl {}
 for archivo_frm in $(find . -type f -name "*.frm"); do
 	directorio=$(echo ${archivo_frm} | cut -d "/" -f 3)
 
+	if [[ ! -d ./bin/${directorio}/frm.d ]]; then
+		mkdir -p ./bin/${directorio}/frm.d
+	fi
+
 	mv ${archivo_frm} ./bin/${directorio}/frm.d
 done
 
@@ -19,7 +23,11 @@ for archivo_4gl in $(find . -type f -name "*.4gl"); do
 	directorio=$(echo ${archivo_4gl} | awk -F "/" '{for(i=3; i<NF; i++){printf "%s/", $i}; print ""}' | \
 		sed 's/4gl.d/4go.d/g')
 
-	mv ./${archivo_4go} bin/${directorio}
+	if [[ ! -d ./bin/${directorio} ]]; then
+		mkdir -p ./bin/${directorio}
+	fi
+
+	mv ./${archivo_4go} ./bin/${directorio}
 done
 
 # Programa login
